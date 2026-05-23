@@ -73,6 +73,7 @@ struct CalcRollView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.horizontal, 8.0)
                     .padding(.bottom, 4.0)
+                    .cappedAtLargeTypeSize()
             }
             
             // CalcViewを3個横に並べ、1ページずつ左右に切り替える
@@ -252,6 +253,7 @@ struct CalcRollHeaderView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.top, -14)
+                        .cappedAtLargeTypeSize()
                 }
             }
             .frame(minWidth: 60, maxWidth: 100)
@@ -331,6 +333,7 @@ struct CalcRollHeaderView: View {
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: 140)
                             .padding(.top, -8)
+                            .cappedAtLargeTypeSize()
                     }
                 }
             }
@@ -360,6 +363,7 @@ struct CalcRollHeaderView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.top, -14)
+                        .cappedAtLargeTypeSize()
                 }
             }
             .frame(minWidth: 60, maxWidth: 100)

@@ -121,6 +121,7 @@ struct KeyboardView: View {
                         .multilineTextAlignment(.center)
                         .padding(.top, -8)
                         .padding(.horizontal, 12)
+                        .cappedAtLargeTypeSize()
                 }
             }
         }
@@ -371,6 +372,7 @@ struct KeyboardFooterView: View {
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.7)
                                 .foregroundStyle(.secondary)
+                                .cappedAtLargeTypeSize()
                         }
                     }
                     .padding(.trailing, 10)
@@ -876,6 +878,7 @@ struct KeyDefListView: View {
                         .foregroundStyle(.secondary)
                         .padding(.horizontal, 12)
                 }
+                .cappedAtLargeTypeSize()
             }
         }
     }

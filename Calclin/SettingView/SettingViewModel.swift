@@ -215,7 +215,7 @@ final class SettingViewModel: ObservableObject {
                 case .G23:  return .indian
             }
         }
-        // PickerやText表示用のlocalized文字列
+        // PickerやText表示用のlocalized文字列（既定はカンマ）
         var localized: String {
             switch self {
                 case .none: return String(localized: "settings.grouping.none")
@@ -223,6 +223,24 @@ final class SettingViewModel: ObservableObject {
                 case .G23:  return String(localized: "settings.grouping.indian")
                 case .G4:   return String(localized: "settings.grouping.four")
             }
+        }
+
+        /// 現在選択中の桁区切り記号・小数点で例文を描画する
+        /// - localized 内の "," を groupSeparator、"." を decimalSeparator に置換する
+        /// - 置換順による干渉（例：group="." dec="," の場合に "." → "," → "." と二重置換される）を防ぐため、
+        ///   小数点を一旦プレースホルダ文字に逃がしてから戻す
+        func localized(groupSeparator: String, decimalSeparator: String) -> String {
+            let base = localized
+            // 既定（group=","、dec="."）と一致するなら無変換でそのまま返す
+            if groupSeparator == "," && decimalSeparator == "." {
+                return base
+            }
+            // U+0001（START OF HEADING）は通常の文字列に出現しない安全な一時プレースホルダ
+            let placeholder = "\u{0001}"
+            var result = base.replacingOccurrences(of: ".", with: placeholder)
+            result = result.replacingOccurrences(of: ",", with: groupSeparator)
+            result = result.replacingOccurrences(of: placeholder, with: decimalSeparator)
+            return result
         }
     }
     @Published var groupType: GroupType = .G3 {
@@ -356,8 +374,16 @@ final class SettingViewModel: ObservableObject {
 
         var id: String { rawValue }
 
-        /// プルダウンで各フォントのプレビューに使うサンプル文字列
-        static let sample = "1234567890"
+        /// 標準フォーマット時のサンプル文字列（既定値・参考用）
+        static let sample = "123,456,789.0"
+
+        /// 現在の設定（桁区切り方式・桁区切り記号・小数点）を反映したサンプル文字列を返す
+        /// - 9 桁数値 "123456789" を `AZDecimal.formatted(config)` で整形し、末尾に "<decimalSeparator>0" を付ける
+        /// - これにより 3桁/4桁/インド式/区切りなし の方式違いと、記号違いがすべて反映される
+        static func sample(config: AZDecimalConfig) -> String {
+            let integerFormatted = AZDecimal("123456789").formatted(config)
+            return integerFormatted + config.decimalSeparator + "0"
+        }
 
         /// 指定サイズで SwiftUI Font を返す
         /// - カスタムフォント（Menlo / Avenir / DIN）は書体側で太さが決まるため weight 引数は無視される

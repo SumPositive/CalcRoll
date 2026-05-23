@@ -54,13 +54,14 @@ struct CalcView: View {
 
     /// フォント選択ポップオーバーのプレビュー用文字列
     /// - 入力行に有意な値があればそれを使う（同じ文字でフォントの違いを比較できる）
-    /// - 空・初期値の場合は汎用サンプル "−(1234567890)+" にフォールバック
+    /// - 空・初期値の場合は汎用サンプル「123,456,789.0」にフォールバック
+    ///   （桁区切り方式・記号・小数点設定をすべて反映）
     private var numberFontPreviewText: String {
         let plain = String(viewModel.formulaAttr.characters)
             .trimmingCharacters(in: .whitespacesAndNewlines)
         // 初期表示や "0" だけのときは違いが分かりにくいのでサンプルへ切替
         if plain.isEmpty || plain == "0" || plain == "0." {
-            return SettingViewModel.NumberFont.sample
+            return SettingViewModel.NumberFont.sample(config: calcConfig)
         }
         return plain
     }
@@ -360,6 +361,8 @@ private struct PaperToolButtonLabel: View {
                 Text(title)
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.secondary.opacity(0.70))
+                    // 入力行ツールのラベルは特大時でも大ぎないよう「大」上限にする
+                    .cappedAtLargeTypeSize()
             }
         }
         .frame(minWidth: showsTitle ? 0 : 36 * iconScale,

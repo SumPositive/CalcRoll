@@ -271,6 +271,7 @@ struct SettingView: View {
                             .foregroundStyle(.secondary)
                             .padding(.top, 2)
                             .fixedSize(horizontal: false, vertical: true)
+                            .cappedAtLargeTypeSize()
                     }
                 }
                 VStack(alignment: .leading, spacing: 4) {
@@ -296,6 +297,7 @@ struct SettingView: View {
                             .foregroundStyle(.secondary)
                             .padding(.top, 2)
                             .fixedSize(horizontal: false, vertical: true)
+                            .cappedAtLargeTypeSize()
                     }
                 }
 
@@ -312,7 +314,9 @@ struct SettingView: View {
                                         isExpanded: dropdownBinding(.numberFont),
                                         minWidth: 220,
                                         labelStylesOwnFont: true) { numberFont in
-                            Text(SettingViewModel.NumberFont.sample)
+                            // サンプル文字列は現在の桁区切り方式・記号・小数点に追随する
+                            // （AZDecimal.formatted を利用して既存ロジックを再利用）
+                            Text(SettingViewModel.NumberFont.sample(config: calcConfig))
                                 .font(numberFont.font(size: numberFontMenuPreviewSize, weight: .bold))
                                 // 数字フォント候補は inputRowFontScale で拡大率を制御する
                                 .dynamicTypeSize(.large)
@@ -327,6 +331,7 @@ struct SettingView: View {
                             .foregroundStyle(.secondary)
                             .padding(.top, 2)
                             .fixedSize(horizontal: false, vertical: true)
+                            .cappedAtLargeTypeSize()
                     }
                 }
                 .zIndex(expandedDropdown == .numberFont ? 50 : 0)
@@ -353,7 +358,9 @@ struct SettingView: View {
                                     selection: $viewModel.groupType,
                                     isExpanded: dropdownBinding(.groupType),
                                     minWidth: 210) { type in
-                        Text(type.localized)
+                        // 例文中の桁区切り記号・小数点を現在選択中の記号に動的置換して表示する
+                        Text(type.localized(groupSeparator: viewModel.groupSeparator.symbol,
+                                            decimalSeparator: viewModel.decimalSeparator.symbol))
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .onChange(of: viewModel.groupType) { oldValue, newValue in
@@ -845,6 +852,7 @@ private struct SettingDropdown<Option: Hashable & Identifiable, Label: View>: Vi
             expandedOptions
                 .dynamicTypeSize(.large)
         } else {
+            // ポップオーバーはシートの外に出るため、設定文字サイズを明示的に伝える
             expandedOptions
                 .appFontScale(viewModel.fontScale)
         }
@@ -906,6 +914,7 @@ private struct SettingDropdown<Option: Hashable & Identifiable, Label: View>: Vi
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
         if labelStylesOwnFont {
+            // 数字フォント候補：候補表示のサイズ感を尊重するためそのまま
             base
         } else {
             base.font(.subheadline.weight(.semibold))
@@ -1327,14 +1336,17 @@ private struct SettingSectionCard<Content: View>: View {
     @ViewBuilder
     private func headerText(title: LocalizedStringResource, description: LocalizedStringResource?) -> some View {
         VStack(alignment: .leading, spacing: 4) {
+            // セクションタイトル（"表示" など）はキャップせず、ユーザーが選んだ文字サイズを反映する
             Text(title)
                 .font(.headline)
                 .fixedSize(horizontal: false, vertical: true)
             if let description {
+                // 説明文は補助的なので、特大時にも「大」相当で頭打ちにする
                 Text(description)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+                    .cappedAtLargeTypeSize()
             }
         }
     }

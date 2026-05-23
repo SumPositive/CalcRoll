@@ -432,6 +432,7 @@ struct ContentView: View {
                                     .foregroundStyle(.secondary)
                                     .padding(.top, 4)
                                     .padding(.horizontal, 4)
+                                    .cappedAtLargeTypeSize()
                             }
                         }
                     }
@@ -683,5 +684,12 @@ extension View {
     /// 設定の文字サイズを適用する。シート内側でも明示的に呼ぶこと
     func appFontScale(_ fontScale: SettingViewModel.FontScale) -> some View {
         modifier(FontScaleModifier(fontScale: fontScale))
+    }
+
+    /// 文字サイズを「大」(.xxxLarge) 相当で頭打ちにする。
+    /// - 初心者ヘルプやボタン内ラベルなど、特大設定でも大きくしたくない UI 要素に適用する。
+    /// - すでに「大」以下の場合は何もしない（範囲指定なので拡大方向に作用しない）。
+    func cappedAtLargeTypeSize() -> some View {
+        dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     }
 }
