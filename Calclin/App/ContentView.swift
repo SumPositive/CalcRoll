@@ -143,17 +143,21 @@ struct PassthroughLongPressArea: UIViewRepresentable {
 
         @objc private func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
             guard let targetView, let installedView else { return }
-            let point = targetView.convert(recognizer.location(in: installedView), from: installedView)
+            // window 座標を基準にデルタを取る。targetView 座標を使うと、targetView 自体が
+            // ドラッグの結果として動いた時に座標系がシフトし、フィードバックループで振動する。
+            let windowPoint = recognizer.location(in: installedView)
+            let localPoint = targetView.convert(windowPoint, from: installedView)
 
             switch recognizer.state {
             case .began:
-                guard targetView.bounds.contains(point) else { return }
+                // 開始位置がハンドル領域内であることだけ localPoint で確認する
+                guard targetView.bounds.contains(localPoint) else { return }
                 isTracking = true
-                startY = point.y
+                startY = windowPoint.y           // 以後のデルタは window 座標で測る
                 onLongPressChanged(true)
             case .changed:
                 guard isTracking else { return }
-                onDragChanged(point.y - startY)
+                onDragChanged(windowPoint.y - startY)
             case .ended, .cancelled, .failed:
                 guard isTracking else { return }
                 isTracking = false
@@ -297,6 +301,9 @@ struct ContentView: View {
     @State private var selectedCalc: Int = 0
     // キーボード領域の高さを保存し、履歴領域との比率を復元する
     @AppStorage("keyboardAreaHeight") private var keyboardAreaHeight: Double = 360.0
+    // ドラッグ中だけ使うライブ高さ。@AppStorage への書き込みはドラッグ終了時に 1 回だけ行う
+    // （毎フレーム UserDefaults へ書くとカクつきの原因になる）
+    @State private var liveKeyboardAreaHeight: Double? = nil
     // 長押しでリサイズ操作に入った時の開始高さ
     @State private var keyboardResizeStartHeight: CGFloat = 360.0
     // 長押しリサイズ中だけ境界を薄く表示する
@@ -347,7 +354,10 @@ struct ContentView: View {
     }
 
     private var normalizedKeyboardHeight: CGFloat {
-        clampedKeyboardHeight(CGFloat(keyboardAreaHeight))
+        // ドラッグ中はライブ値（@State）を使う。これにより毎フレーム UserDefaults を書かずに済み、
+        // 描画もスムーズになる。ドラッグ未実施 / 終了済みなら永続化値を使う。
+        let source = liveKeyboardAreaHeight ?? keyboardAreaHeight
+        return clampedKeyboardHeight(CGFloat(source))
     }
 
     private var minimumKeyboardHeight: CGFloat {
@@ -465,14 +475,22 @@ struct ContentView: View {
                                 isKeyboardResizeHintVisible = false
                                 keyboardResizeHintTask?.cancel()
                                 keyboardResizeStartHeight = normalizedKeyboardHeight
+                                // ドラッグ中は @State のライブ値を更新（@AppStorage は終了時に 1 回だけ書く）
+                                liveKeyboardAreaHeight = Double(normalizedKeyboardHeight)
                                 isKeyboardResizing = true
                             }
                         },
                         onDragChanged: { translationHeight in
                             let nextHeight = keyboardResizeStartHeight - translationHeight
-                            keyboardAreaHeight = Double(clampedKeyboardHeight(nextHeight))
+                            // ライブ値だけ更新（永続化はしない）→ 毎フレームの UserDefaults 書き込みを排除
+                            liveKeyboardAreaHeight = Double(clampedKeyboardHeight(nextHeight))
                         },
                         onEnded: {
+                            // ドラッグ終了時にだけ永続化
+                            if let live = liveKeyboardAreaHeight {
+                                keyboardAreaHeight = live
+                            }
+                            liveKeyboardAreaHeight = nil
                             isKeyboardResizing = false
                         }
                     )
