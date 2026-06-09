@@ -47,7 +47,6 @@
 				App/Assets.xcassets,
 				App/Config.swift,
 				App/ContentView.swift,
-				"App/GoogleService-Info.plist",
 				App/Localizable.xcstrings,
 				App/Log.swift,
 				App/Manager.swift,
@@ -76,7 +75,6 @@
 			membershipExceptions = (
 				App/AppMain.swift,
 				App/Assets.xcassets,
-				"App/GoogleService-Info.plist",
 				Info.plist,
 				KeyboardView/initKeyboard.json,
 				KeyboardView/KeyDefinition.json,

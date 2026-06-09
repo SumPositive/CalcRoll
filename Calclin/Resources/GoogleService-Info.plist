@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAMdc40TXSNJj6NmNo7MKJsYgl_qCfpLAc</string>
+	<string>AIzaSyDcqrDRwkrvC58idZYuDdF9raznI9zOgYI</string>
 	<key>GCM_SENDER_ID</key>
-	<string>64806275400</string>
+	<string>848972484063</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.azukid.AzukiSoft.AzCalc</string>
 	<key>PROJECT_ID</key>
-	<string>calclinv2</string>
+	<string>calclin</string>
 	<key>STORAGE_BUCKET</key>
-	<string>calclinv2.firebasestorage.app</string>
+	<string>calclin.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:64806275400:ios:e24b94f1678f68d4340b7d</string>
+	<string>1:848972484063:ios:bb6831fde56feb5551486a</string>
 </dict>
 </plist>
