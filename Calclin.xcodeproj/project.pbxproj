@@ -9,9 +9,10 @@
 /* Begin PBXBuildFile section */
 		AC01000000000000000000A1 /* AZDecimal in Frameworks */ = {isa = PBXBuildFile; productRef = AC01000000000000000000A2 /* AZDecimal */; };
 		AC01000000000000000000A3 /* AZFormula in Frameworks */ = {isa = PBXBuildFile; productRef = AC01000000000000000000A4 /* AZFormula */; };
-		B9A4F2072F5C1AAB00A1B001 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = B9A4F2052F5C1AAB00A1B001 /* FirebaseCrashlytics */; };
-		B9A4F2082F5C1ABB00A1B001 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B9A4F2092F5C1ABB00A1B001 /* FirebaseAnalytics */; };
 		C3165E4D2EE6D6B900169223 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = C3165E4C2EE6D6B900169223 /* GoogleMobileAds */; };
+		C38A3D1D2FD84C4A00AC7390 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C38A3D1C2FD84C4A00AC7390 /* FirebaseAnalytics */; };
+		C38A3D1F2FD84C4A00AC7390 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = C38A3D1E2FD84C4A00AC7390 /* FirebaseCore */; };
+		C38A3D212FD84C4A00AC7390 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = C38A3D202FD84C4A00AC7390 /* FirebaseCrashlytics */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,10 +141,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC01000000000000000000A1 /* AZDecimal in Frameworks */,
+				C38A3D1F2FD84C4A00AC7390 /* FirebaseCore in Frameworks */,
 				AC01000000000000000000A3 /* AZFormula in Frameworks */,
+				C38A3D212FD84C4A00AC7390 /* FirebaseCrashlytics in Frameworks */,
+				C38A3D1D2FD84C4A00AC7390 /* FirebaseAnalytics in Frameworks */,
 				C3165E4D2EE6D6B900169223 /* GoogleMobileAds in Frameworks */,
-				B9A4F2072F5C1AAB00A1B001 /* FirebaseCrashlytics in Frameworks */,
-				B9A4F2082F5C1ABB00A1B001 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,9 +213,10 @@
 			packageProductDependencies = (
 				AC01000000000000000000A2 /* AZDecimal */,
 				AC01000000000000000000A4 /* AZFormula */,
-				B9A4F2052F5C1AAB00A1B001 /* FirebaseCrashlytics */,
-				B9A4F2092F5C1ABB00A1B001 /* FirebaseAnalytics */,
 				C3165E4C2EE6D6B900169223 /* GoogleMobileAds */,
+				C38A3D1C2FD84C4A00AC7390 /* FirebaseAnalytics */,
+				C38A3D1E2FD84C4A00AC7390 /* FirebaseCore */,
+				C38A3D202FD84C4A00AC7390 /* FirebaseCrashlytics */,
 			);
 			productName = Calclin;
 			productReference = C30A78A32E10EE8500212729 /* Calclin.app */;
@@ -301,8 +304,8 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				AC01000000000000000000A5 /* XCRemoteSwiftPackageReference "AZCalc" */,
-				B9A4F2062F5C1AAB00A1B001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C3165E4B2EE6D68A00169223 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				C38A3D1B2FD84C4A00AC7390 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C30A78A42E10EE8500212729 /* Products */;
@@ -707,18 +710,17 @@
 				kind = branch;
 			};
 		};
-		B9A4F2062F5C1AAB00A1B001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
-			requirement = {
-				kind = versionRange;
-				maximumVersion = 13.0.0;
-				minimumVersion = 10.24.0;
-			};
-		};
 		C3165E4B2EE6D68A00169223 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.14.0;
+			};
+		};
+		C38A3D1B2FD84C4A00AC7390 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 12.14.0;
@@ -737,20 +739,25 @@
 			package = AC01000000000000000000A5 /* XCRemoteSwiftPackageReference "AZCalc" */;
 			productName = AZFormula;
 		};
-		B9A4F2052F5C1AAB00A1B001 /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B9A4F2062F5C1AAB00A1B001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCrashlytics;
-		};
-		B9A4F2092F5C1ABB00A1B001 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B9A4F2062F5C1AAB00A1B001 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
 		C3165E4C2EE6D6B900169223 /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C3165E4B2EE6D68A00169223 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
+		};
+		C38A3D1C2FD84C4A00AC7390 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C38A3D1B2FD84C4A00AC7390 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		C38A3D1E2FD84C4A00AC7390 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C38A3D1B2FD84C4A00AC7390 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		C38A3D202FD84C4A00AC7390 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C38A3D1B2FD84C4A00AC7390 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
