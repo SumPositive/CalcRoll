@@ -54,6 +54,14 @@ Calclin/
 - Xcode 26+
 - Swift 6
 
+## プロジェクト管理
+
+- プロジェクト設定は Xcode と `Calclin.xcodeproj` で管理します
+- XcodeGen の導入・実行は禁止します
+- `project.yml` などの XcodeGen 用設定ファイルは作成しません
+- ファイル、Build Phase、Build Setting、Swift Package などの追加・変更は Xcode プロジェクトへ直接反映します
+- `Calclin.xcodeproj/project.pbxproj` をプロジェクト構成の唯一の正とします
+
 ## 署名に関する注意
 
 このアプリは 2010 年に古い App ID Prefix（現在の Team ID とは異なるもの）で公開されています。App Store に更新を提出する場合は、以下の手順が必要です。
