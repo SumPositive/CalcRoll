@@ -1,18 +1,12 @@
-//
-//  Calc26Tests.swift
-//  Calc26Tests
-//
-//  Created by sumpo/azukid on 2025/06/29.
-//
+// CalclinTests.swift
+// テストターゲットの基本確認
 
 import Testing
-@testable import Calc26
 
-struct Calc26Tests {
+// 現在のアプリターゲットをテストする
+@testable import Calclin
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
-    }
-
+@Test("テスト環境を起動できる")
+func loadsTestEnvironment() {
+    #expect(FORMULA_LENGTH_MAX == 200)
 }
-

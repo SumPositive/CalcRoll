@@ -1,33 +1,20 @@
-//
-//  Calc26UITestsLaunchTests.swift
-//  Calc26UITests
-//
-//  Created by Sum Positive on 2025/06/29.
-//
+// CalclinUITestsLaunchTests.swift
+// 起動画面の確認テスト
 
 import XCTest
 
-final class Calc26UITestsLaunchTests: XCTestCase {
+// UIテストはSwift Testing非対応のためXCTestで実行する
+final class CalclinLaunchUITests: XCTestCase {
 
-    override class var runsForEachTargetApplicationUIConfiguration: Bool {
-        true
-    }
-
-    override func setUpWithError() throws {
-        continueAfterFailure = false
-    }
-
+    // 起動後の画面を画像として取得できることを確認する
     @MainActor
-    func testLaunch() throws {
+    func testCapturesLaunchScreen() {
         let app = XCUIApplication()
         app.launch()
+        defer { app.terminate() }
 
-        // Insert steps here to perform after app launch but before taking a screenshot,
-        // such as logging into a test account or navigating somewhere in the app
-
-        let attachment = XCTAttachment(screenshot: app.screenshot())
-        attachment.name = "Launch Screen"
-        attachment.lifetime = .keepAlways
-        add(attachment)
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        let screenshot = app.screenshot()
+        XCTAssertFalse(screenshot.pngRepresentation.isEmpty)
     }
 }

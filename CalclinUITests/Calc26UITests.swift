@@ -1,44 +1,32 @@
-//
-//  Calc26UITests.swift
-//  Calc26UITests
-//
-//  Created by Sum Positive on 2025/06/29.
-//
+// CalclinUITests.swift
+// 基本的な起動UIテスト
 
 import XCTest
-@testable import Calc26
 
+// UIテストはSwift Testing非対応のためXCTestで実行する
+final class CalclinUITests: XCTestCase {
 
-final class Calc26UITests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
+    // アプリを起動して前面表示できることを確認する
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testLaunchesApplication() {
         let app = XCUIApplication()
         app.launch()
+        defer { app.terminate() }
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
     }
 
+    // アプリを規定時間内に起動できることを確認する
     @MainActor
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
-        }
+    func testLaunchesWithinExpectedDuration() {
+        let app = XCUIApplication()
+        let clock = ContinuousClock()
+        let start = clock.now
+        app.launch()
+        defer { app.terminate() }
+
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        let elapsed = start.duration(to: clock.now)
+        XCTAssertLessThan(elapsed, .seconds(10))
     }
 }
-

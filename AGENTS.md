@@ -13,3 +13,11 @@
 - プロジェクト設定は Xcode と `Calclin.xcodeproj` で管理すること
 - `Calclin.xcodeproj/project.pbxproj` をプロジェクト構成の唯一の正として扱うこと
 - ファイル、Build Phase、Build Setting、Swift Package などの追加・変更は Xcode プロジェクトへ直接反映すること
+
+## テスト記述
+
+- 新しいテストはSwift Testingを使用すること
+- テストは`@Test("日本語の説明文")`と英語の関数名を組み合わせること
+- 複数ケースは可能な限り`arguments`でパラメータ化すること
+- UIテストはSwift Testing非対応のためXCTestを使用すること
+- UIテストは日本語の説明コメントと`test`から始まる英語の関数名を組み合わせること

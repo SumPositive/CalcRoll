@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AC01000000000000000000A1 /* AZDecimal in Frameworks */ = {isa = PBXBuildFile; productRef = AC01000000000000000000A2 /* AZDecimal */; };
 		AC01000000000000000000A3 /* AZFormula in Frameworks */ = {isa = PBXBuildFile; productRef = AC01000000000000000000A4 /* AZFormula */; };
+		AC01000000000000000000B3 /* AZFormula in Frameworks */ = {isa = PBXBuildFile; productRef = AC01000000000000000000A4 /* AZFormula */; };
 		C3165E4D2EE6D6B900169223 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = C3165E4C2EE6D6B900169223 /* GoogleMobileAds */; };
 		C38A3D1D2FD84C4A00AC7390 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C38A3D1C2FD84C4A00AC7390 /* FirebaseAnalytics */; };
 		C38A3D1F2FD84C4A00AC7390 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = C38A3D1E2FD84C4A00AC7390 /* FirebaseCore */; };
@@ -21,14 +22,14 @@
 			containerPortal = C30A789B2E10EE8500212729 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C30A78A22E10EE8500212729;
-			remoteInfo = Calc26;
+			remoteInfo = Calclin;
 		};
 		C30A78BB2E10EE8700212729 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C30A789B2E10EE8500212729 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C30A78A22E10EE8500212729;
-			remoteInfo = Calc26;
+			remoteInfo = Calclin;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -72,44 +73,6 @@
 			);
 			target = C30A78A22E10EE8500212729 /* Calclin */;
 		};
-		C3308B282E2F3F34009ED6D6 /* Exceptions for "Calclin" folder in "CalclinTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				App/AppMain.swift,
-				Info.plist,
-				KeyboardView/initKeyboard.json,
-				KeyboardView/KeyDefinition.json,
-				Resources/Assets.xcassets,
-				"Resources/GoogleService-Info.plist",
-			);
-			target = C30A78AF2E10EE8700212729 /* CalclinTests */;
-		};
-		C3308B292E2F3F34009ED6D6 /* Exceptions for "Calclin" folder in "CalclinUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"/Localized: Resources/InfoPlist.strings",
-				App/Config.swift,
-				App/ContentView.swift,
-				App/Log.swift,
-				App/Manager.swift,
-				App/PopupView.swift,
-				CalcView/CalcRollView.swift,
-				CalcView/CalcShareHelper.swift,
-				CalcView/CalcStateCodable.swift,
-				CalcView/CalcView.swift,
-				CalcView/CalcViewModel.swift,
-				CalcView/FormulaView.swift,
-				CalcView/HistoryView.swift,
-				KeyboardView/KeyboardView.swift,
-				KeyboardView/KeyboardViewModel.swift,
-				Resources/Localizable.xcstrings,
-				SettingView/AdMobViews.swift,
-				SettingView/SettingView.swift,
-				SettingView/SettingViewModel.swift,
-				SettingView/TipStore.swift,
-			);
-			target = C30A78B92E10EE8700212729 /* CalclinUITests */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -127,8 +90,6 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				C3308B272E2F3F34009ED6D6 /* Exceptions for "Calclin" folder in "Calclin" target */,
-				C3308B282E2F3F34009ED6D6 /* Exceptions for "Calclin" folder in "CalclinTests" target */,
-				C3308B292E2F3F34009ED6D6 /* Exceptions for "Calclin" folder in "CalclinUITests" target */,
 			);
 			path = Calclin;
 			sourceTree = "<group>";
@@ -153,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC01000000000000000000B3 /* AZFormula in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,10 +199,10 @@
 			);
 			fileSystemSynchronizedGroups = (
 				C30A78B32E10EE8700212729 /* CalclinTests */,
-				C3308AFD2E2F3F34009ED6D6 /* Calclin */,
 			);
 			name = CalclinTests;
 			packageProductDependencies = (
+				AC01000000000000000000A4 /* AZFormula */,
 			);
 			productName = CalclinTests;
 			productReference = C30A78B02E10EE8700212729 /* CalclinTests.xctest */;
