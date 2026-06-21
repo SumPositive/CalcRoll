@@ -355,6 +355,7 @@ struct KeyboardFooterView: View {
                     Spacer()
                     VStack(spacing: 0) {
                         Button {
+                            AppAnalytics.logKeyStylePopupOpened()
                             setting.isKeyStylePopupPresented = true
                         } label: {
                             Image(systemName: "slider.horizontal.3")

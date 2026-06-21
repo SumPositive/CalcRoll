@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseAnalytics
+import FirebaseCrashlytics
 
 
 enum LogLevel: Int, Comparable {
@@ -28,6 +28,16 @@ enum LogLevel: Int, Comparable {
     
     static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
         lhs.rawValue < rhs.rawValue
+    }
+
+    var analyticsName: String {
+        switch self {
+        case .info:    return "info"
+        case .debug:   return "debug"
+        case .warning: return "warning"
+        case .error:   return "error"
+        case .fatal:   return "fatal"
+        }
     }
 }
 
@@ -51,13 +61,19 @@ func log(_ level: LogLevel,
 
     switch level {
         case .error, .fatal:
-            Analytics.logEvent("error_occured", parameters: [
-                "error_domain": function,
-                "error_code": -1,
-                "error_message": printOut
-            ])
+            AppAnalytics.logAppError(level: level,
+                                     fileName: fileName,
+                                     function: function,
+                                     line: line)
+            // 計算内容やメモを含めないため、Crashlyticsにも発生箇所だけを記録する
+            let error = NSError(domain: "Calclin.\(fileName).\(function)",
+                                code: line,
+                                userInfo: [
+                                    "level": level.analyticsName,
+                                    "file": fileName
+                                ])
+            Crashlytics.crashlytics().record(error: error)
         default:
             break
     }
 }
-

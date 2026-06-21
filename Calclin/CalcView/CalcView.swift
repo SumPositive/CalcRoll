@@ -163,6 +163,7 @@ struct CalcView: View {
                                 minimumDuration: 0.6,
                                 onLongPressChanged: { isPressing in
                                     if isPressing {
+                                        AppAnalytics.logNumberFontQuickPickerOpened(calcMode: viewModel.calcMode)
                                         isNumberFontPickerPresented = true
                                     }
                                 },
@@ -232,7 +233,10 @@ struct CalcView: View {
     private func inputLineTools(showsTitle: Bool) -> some View {
         HStack(spacing: 12) {
             Button {
-                viewModel.calcMode = (viewModel.calcMode == .calculator) ? .formula : .calculator
+                let oldMode = viewModel.calcMode
+                let newMode: CalcMode = (oldMode == .calculator) ? .formula : .calculator
+                AppAnalytics.logCalcModeToggled(from: oldMode, to: newMode)
+                viewModel.calcMode = newMode
             } label: {
                 PaperToolButtonLabel(
                     systemName: viewModel.calcMode == .calculator ? "plus.forwardslash.minus" : "function",
@@ -244,6 +248,7 @@ struct CalcView: View {
             }
 
             Button {
+                AppAnalytics.logPDFExportStarted(calcMode: viewModel.calcMode)
                 isGeneratingPDF = true
                 Task { @MainActor in
                     try? await Task.sleep(nanoseconds: 80_000_000)

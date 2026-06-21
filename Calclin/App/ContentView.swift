@@ -489,6 +489,7 @@ struct ContentView: View {
                             // ドラッグ終了時にだけ永続化
                             if let live = liveKeyboardAreaHeight {
                                 keyboardAreaHeight = live
+                                AppAnalytics.logKeyboardHeightChanged(height: CGFloat(live))
                             }
                             liveKeyboardAreaHeight = nil
                             isKeyboardResizing = false
@@ -501,6 +502,8 @@ struct ContentView: View {
                 KeyboardView(viewModel: keyboardViewModel,
                              activeCalcViewModel: selectedViewModel,
                              onTap: { keyDef in
+                    // 実際の数値や式は送らず、キー種別だけをAnalyticsへ送る
+                    AppAnalytics.logKeyTapped(keyDef, calcMode: selectedViewModel.calcMode)
                     // 選択中のCalcViewへkeyDefを送る
                     selectedViewModel.input(keyDef)
                 })
@@ -646,8 +649,9 @@ struct ContentView: View {
         // 文字サイズ：自動以外は固定の DynamicTypeSize を適用
         // 設定シートを含む全画面・全シートに反映される
         .modifier(FontScaleModifier(fontScale: setting.fontScale))
-        .task {
+        .task { @MainActor in
             showKeyboardResizeHintIfNeeded()
+            AppAnalytics.logSettingsSnapshot(setting)
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
@@ -669,6 +673,7 @@ struct ContentView: View {
                 // スワイプダウンなどで閉じられた時も正確に計測する
                 .onDisappear {
                     AppAnalytics.logSettingSheetClosed()
+                    AppAnalytics.logSettingsSnapshot(setting)
                 }
                 .presentationDetents(settingSheetDetents)
                 .presentationDragIndicator(.visible)
