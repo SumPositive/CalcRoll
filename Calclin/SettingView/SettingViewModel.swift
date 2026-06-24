@@ -143,7 +143,7 @@ final class SettingViewModel: ObservableObject {
                 case .R55:    return .r55
                 case .R65:    return .r65
                 case .Rminus: return .rMinus
-                case .Rdown:  return .truncate
+                case .Rdown:  return .keepFull  // 値は全桁保持し、表示時に formatted() が桁数で切り捨てる
             }
         }
         // PickerやText表示用のlocalized文字列

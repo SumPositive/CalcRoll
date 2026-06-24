@@ -1677,7 +1677,7 @@ final class CalcViewModel: ObservableObject {
 
         switch AZFormula.evaluateDecimal(formula, config: calcConfig) {
         case .success(let decimal):
-            // .truncate は rounded(_:) が self を返すため全桁保持される
+            // .keepFull は rounded(_:) が self を返すため全桁保持される
             return decimal.value
         case .failure(.tooLong):
             log(.warning, "formula: FORMULA_MAX_LENGTH OVER")
@@ -1688,6 +1688,15 @@ final class CalcViewModel: ObservableObject {
         case .failure(.zeroDivision):
             log(.error, "ゼロ除算: \(formula)")
             return String(localized: "calc.error.divideByZero")
+        case .failure(.overflow):
+            log(.error, "オーバーフロー: \(formula)")
+            return String(localized: "calc.result.error", defaultValue: "Error")
+        case .failure(.unmatchedParenthesis):
+            log(.error, "括弧の不一致: \(formula)")
+            return String(localized: "calc.result.error", defaultValue: "Error")
+        case .failure(.missingOperand):
+            log(.error, "オペランド不足: \(formula)")
+            return String(localized: "calc.result.error", defaultValue: "Error")
         case .failure(.invalidExpression):
             log(.error, "無効な式: \(formula)")
             return String(localized: "calc.result.error", defaultValue: "Error")
