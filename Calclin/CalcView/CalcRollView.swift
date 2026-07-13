@@ -15,7 +15,7 @@ struct CalcRollView: View {
     let calcViewModels: [CalcViewModel]
     let onCalcChange: (Int) -> Void
 
-    
+
     // @State 変化あればViewが更新される
     @State private var singleMode = true    // 初期やダブルクリックで1面になったとき、上部メニューを消してスッキリ
     @State private var selectedPage: Int = 0 // 初期で2ページ目（インデックス1）を表示
@@ -23,6 +23,32 @@ struct CalcRollView: View {
     @State private var showCount: Int = 1
     // ダークモード対応
     @Environment(\.colorScheme) var colorScheme
+
+    init(calcViewModels: [CalcViewModel], onCalcChange: @escaping (Int) -> Void) {
+        self.calcViewModels = calcViewModels
+        self.onCalcChange = onCalcChange
+
+        #if DEBUG
+        // fastlane snapshot 撮影中は、カット番号に応じて初期表示ページ・列数を固定する
+        // （UI操作でのページ送りに頼らず、狙ったパネルを確実に撮るため）。
+        if SnapshotSupport.isRunningSnapshot {
+            switch SnapshotSupport.snapshotCut {
+            case 2: // 02Formula: index1（数式）を1面表示
+                _selectedPage = State(initialValue: 1)
+                _showStart = State(initialValue: 1)
+                _showCount = State(initialValue: 1)
+                _singleMode = State(initialValue: true)
+            case 3: // 03TwoPanels: index0+1（電卓+数式）を2連表示
+                _selectedPage = State(initialValue: 0)
+                _showStart = State(initialValue: 0)
+                _showCount = State(initialValue: 2)
+                _singleMode = State(initialValue: false)
+            default: // 01Calculator: index0（電卓）を1面表示（既定と同じ）
+                break
+            }
+        }
+        #endif
+    }
 
     // 初心者モードかどうかを簡潔に参照するための計算プロパティ
     private var isBeginner: Bool {

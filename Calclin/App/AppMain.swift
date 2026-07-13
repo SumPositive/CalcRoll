@@ -76,6 +76,19 @@ enum SnapshotSupport {
         return false
         #endif
     }
+
+    /// 撮影カット番号。UITest が起動引数 -SNAPSHOT_CUT <n> で渡す。
+    /// 1=01Calculator（index0=電卓・1面）/ 2=02Formula（index1=数式・1面）/
+    /// 3=03TwoPanels（index0+1=電卓+数式・2連）。未指定時は 1。
+    /// これに応じて CalcRollView の初期表示ページ・列数を固定し、UI操作なしで狙った状態を撮る。
+    static var snapshotCut: Int {
+        #if DEBUG
+        let n = UserDefaults.standard.integer(forKey: "SNAPSHOT_CUT")
+        return n == 0 ? 1 : n
+        #else
+        return 1
+        #endif
+    }
 }
 
 

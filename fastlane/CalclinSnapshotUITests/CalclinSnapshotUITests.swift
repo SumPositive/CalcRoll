@@ -16,11 +16,11 @@
 //    - index0=電卓モード＋電卓サンプル、index1=数式モード＋数式サンプルを CalcViewModel.load() で投入
 //    - AdMob 初期化をスキップ
 //
-//  遷移の考え方:
-//   - 起動直後は index0(電卓) を1面表示 → 01。
-//   - インジケータ（calcPanel_indicator）を右タップ/右スワイプして index1(数式) へ → 02。
-//   - インジケータを右ダブルタップ、または [+]ボタン（calcPanel_increase）で2連にする → 03。
-//   - identifier での操作が空振り（hittable=false）する場合に備え、座標タップにフォールバックする。
+//  遷移の考え方（フック固定方式）:
+//   - UI操作でのページ送りは空振りしやすいので使わない。
+//   - カットごとにアプリを起動し直し、起動引数 -SNAPSHOT_CUT <n> を渡す。
+//   - アプリ側（CalcRollView.init）が n に応じて初期表示ページ・列数を固定する:
+//       1 → index0(電卓) 1面 / 2 → index1(数式) 1面 / 3 → index0+1 の2連。
 //
 
 import XCTest
@@ -35,64 +35,33 @@ final class CalclinSnapshotUITests: XCTestCase {
     func testTakeScreenshots() throws {
         let app = XCUIApplication()
         setupSnapshot(app)
-        app.launch()
-        sleep(2)
 
-        // 01: 電卓モード（起動直後・index0）
+        // 01: 電卓モード（index0・1面）
+        launch(app, cut: 1)
         snapshot("01Calculator")
 
-        // 02: 数式モード（index1 へページ送り）
-        goNextPage(app)
-        sleep(1)
+        // 02: 数式モード（index1・1面）
+        launch(app, cut: 2)
         snapshot("02Formula")
 
-        // 03: 2連表示（電卓＋数式を横並び）
-        makeTwoPanels(app)
-        sleep(1)
+        // 03: 2連表示（index0+1=電卓+数式）
+        launch(app, cut: 3)
         snapshot("03TwoPanels")
     }
 
-    /// インジケータを操作して次ページ（index1=数式）へ送る。
-    /// ① identifier のインジケータを右側タップ ② ダメなら右スワイプ ③ 最後は画面右寄りを座標タップ。
+    /// カット番号を起動引数 -SNAPSHOT_CUT <n> で渡してアプリを起動する。
+    /// setupSnapshot が付けた言語などの引数は保持し、SNAPSHOT_CUT だけ毎回付け替える。
     @MainActor
-    private func goNextPage(_ app: XCUIApplication) {
-        let indicator = app.otherElements["calcPanel_indicator"]
-        if indicator.waitForExistence(timeout: 5) {
-            if indicator.isHittable {
-                // インジケータの右側をタップ（onTapGesture が「右側=次ページ」）
-                indicator.coordinate(withNormalizedOffset: CGVector(dx: 0.72, dy: 0.5)).tap()
-                return
-            }
+    private func launch(_ app: XCUIApplication, cut: Int) {
+        // 前回分の -SNAPSHOT_CUT / 値 を取り除いてから付け直す
+        var args = app.launchArguments
+        while let i = args.firstIndex(of: "-SNAPSHOT_CUT") {
+            let end = min(i + 2, args.count)
+            args.removeSubrange(i..<end)
         }
-        // フォールバック: 画面中央あたりを左へスワイプしてページ送り
-        let center = app.coordinate(withNormalizedOffset: CGVector(dx: 0.7, dy: 0.45))
-        let target = app.coordinate(withNormalizedOffset: CGVector(dx: 0.3, dy: 0.45))
-        center.press(forDuration: 0.05, thenDragTo: target)
-    }
-
-    /// 2連表示（showCount=2）にする。
-    /// ① [+]ボタン（calcPanel_increase）をタップ ② ダメならインジケータを右ダブルタップ
-    /// ③ 最後はパネル(calcPanel_0)を右ダブルタップ。
-    @MainActor
-    private func makeTwoPanels(_ app: XCUIApplication) {
-        let plus = app.buttons["calcPanel_increase"]
-        if plus.waitForExistence(timeout: 2), plus.isHittable {
-            plus.tap()
-            return
-        }
-        let indicator = app.otherElements["calcPanel_indicator"]
-        if indicator.waitForExistence(timeout: 2) {
-            // 右側でダブルタップ = showPlus（列を増やす）
-            indicator.coordinate(withNormalizedOffset: CGVector(dx: 0.72, dy: 0.5))
-                .doubleTap()
-            return
-        }
-        // フォールバック: 先頭パネルの右半分をダブルタップ（右ダブルタップで2列化）
-        let panel = app.otherElements["calcPanel_0"]
-        if panel.waitForExistence(timeout: 2) {
-            panel.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: 0.35)).doubleTap()
-            return
-        }
-        app.coordinate(withNormalizedOffset: CGVector(dx: 0.75, dy: 0.35)).doubleTap()
+        args.append(contentsOf: ["-SNAPSHOT_CUT", "\(cut)"])
+        app.launchArguments = args
+        app.launch()
+        sleep(2)
     }
 }
