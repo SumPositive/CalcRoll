@@ -52,6 +52,17 @@
                ReferencedContainer = "container:Calclin.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C3563285300529A500539096"
+               BuildableName = "CalclinSnapshotUITests.xctest"
+               BlueprintName = "CalclinSnapshotUITests"
+               ReferencedContainer = "container:Calclin.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

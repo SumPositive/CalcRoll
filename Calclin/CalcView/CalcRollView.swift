@@ -91,6 +91,7 @@ struct CalcRollView: View {
                                  isActive: isActive)
                             .environmentObject(setting) // settingに変化あればCalcViewが再生成される
                             .frame(width: calcWidth)
+                            .accessibilityIdentifier("calcPanel_\(index)") // fastlane snapshot 用: パネル識別
                             .overlay {
                                 PaperRollEdgeLines(isActive: isActive)
                             }
@@ -241,6 +242,7 @@ struct CalcRollHeaderView: View {
                     Image(systemName: "minus.square")
                         //.imageScale(.large)
                 }
+                .accessibilityIdentifier("calcPanel_decrease") // fastlane snapshot 用
                 .opacity(showCount == 1 ? 0.3 : 1.0)
                 .padding() // これがないとタップ有効範囲がImageの最小範囲だけになってしまう
                 .contentShape(Rectangle()) // paddingを含む領域全体をタップ対象にする
@@ -289,6 +291,7 @@ struct CalcRollHeaderView: View {
                     .frame(height: HEADER_HEIGHT)
                     //debug//.border(Color.blue)
                     .contentShape(Rectangle())
+                    .accessibilityIdentifier("calcPanel_indicator") // fastlane snapshot 用: ページ送り/列切替
                     .gesture(
                         DragGesture()
                             .onEnded { value in
@@ -351,6 +354,7 @@ struct CalcRollHeaderView: View {
                     Image(systemName: "plus.square.on.square")
                         //.imageScale(.large)
                 }
+                .accessibilityIdentifier("calcPanel_increase") // fastlane snapshot 用
                 .opacity(showCount == pageCount ? 0.3 : 1.0)
                 .padding() // これがないとタップ有効範囲がImageの最小範囲だけになってしまう
                 .contentShape(Rectangle()) // paddingを含む領域全体をタップ対象にする

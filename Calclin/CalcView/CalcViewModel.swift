@@ -1756,6 +1756,15 @@ final class CalcViewModel: ObservableObject {
 
     /// Documents/calcState_{index}.json から状態を復元する
     func load() {
+        // fastlane snapshot 撮影中は保存状態を無視して、パネル別のサンプル計算を流し込む。
+        // index0 = 電卓モード、index1 = 数式モード。それ以外は既定（電卓・空）。
+        #if DEBUG
+        if SnapshotSupport.isRunningSnapshot {
+            seedSnapshotSample()
+            return
+        }
+        #endif
+
         let url = Self.stateFileURL(for: index)
         guard FileManager.default.fileExists(atPath: url.path),
               let data = try? Data(contentsOf: url),
@@ -1818,6 +1827,46 @@ final class CalcViewModel: ObservableObject {
 
         log(.info, "CalcState[\(index)]: loaded history=\(historyRows.count) mode=\(calcMode)")
     }
+
+#if DEBUG
+    /// fastlane snapshot 撮影用のサンプル計算を流し込む。
+    /// 実際のキー入力（input）を通すので、履歴・ロール・累計が本物と同じ形で生成される。
+    /// index0 = 電卓モード、index1 = 数式モード。数字は "#1"〜"#9"/"#0"、
+    /// 演算子は Add/Sub/Mul/Div、小数点は Deci、= は Ans（キー code は initKeyboard.json 準拠）。
+    private func seedSnapshotSample() {
+        // 桁数字を1キーずつ送る（"1500" → #1 #5 #0 #0）
+        func digits(_ s: String) -> [String] {
+            s.map { "#\(String($0))" }
+        }
+        // 1計算分のキー列（数式）を実行して = で確定する
+        func run(_ codes: [String]) {
+            for code in codes {
+                if let kd = keyboardViewModel.keyDef(code: code) {
+                    input(kd)
+                }
+            }
+            if let ans = keyboardViewModel.keyDef(code: "Ans") {
+                input(ans)
+            }
+        }
+
+        if index == 1 {
+            // 数式モード：優先順位・括弧・√ が伝わる例
+            calcMode = .formula
+            run(digits("5") + ["Add"] + digits("5") + ["Mul"] + digits("2"))          // 5+5×2 = 15
+            run(digits("1250") + ["Add"] + digits("980") + ["Add"] + digits("640"))    // 1250+980+640
+            run(["Paren"] + digits("12") + ["Add"] + digits("8") + ["Paren"] + ["Mul"] + digits("3")) // (12+8)×3
+        } else {
+            // 電卓モード：左から順に計算・累計が伝わる例
+            calcMode = .calculator
+            run(digits("1500") + ["Add"] + digits("2800") + ["Add"] + digits("950"))   // 1500+2800+950
+            run(digits("128") + ["Mul"] + digits("6"))                                 // 128×6
+            run(digits("3600") + ["Div"] + digits("8"))                                // 3600÷8
+        }
+
+        log(.info, "CalcState[\(index)]: seeded snapshot sample mode=\(calcMode) history=\(historyRows.count)")
+    }
+#endif
 
     /// tokens の配列から HistoryRow.formula 用 AttributedString を再構築する
     private func makeFormulaAttr(from rowTokens: [String]) -> AttributedString {

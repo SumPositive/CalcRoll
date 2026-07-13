@@ -538,6 +538,13 @@ final class SettingViewModel: ObservableObject {
         if defaults.object(forKey: StorageKey.keyHighlightAmount) != nil {
             keyHighlightAmount = min(max(defaults.double(forKey: StorageKey.keyHighlightAmount), 0.0), 1.0)
         }
+
+        // fastlane snapshot 撮影中は操作モードを達人（master）に固定する（上級機能を見せるため）。
+        #if DEBUG
+        if SnapshotSupport.isRunningSnapshot {
+            playMode = .master
+        }
+        #endif
     }
 
     private func storedEnum<T>(forKey key: String, default defaultValue: T) -> T

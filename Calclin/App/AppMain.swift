@@ -28,8 +28,14 @@ struct AppMain: App {
         // アプリ起動をAnalyticsへ明示的に通知し、流入経路の把握に備える
         Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
 
-        // AdMob SDKを初期化する
+        // AdMob SDKを初期化する（fastlane snapshot 撮影中は初期化しない＝スクショに広告を絡めない）
+        #if DEBUG
+        if !SnapshotSupport.isRunningSnapshot {
+            MobileAds.shared.start()
+        }
+        #else
         MobileAds.shared.start()
+        #endif
     }
 
     var body: some Scene {
@@ -46,7 +52,30 @@ struct AppMain: App {
 //            }
 //        }
     }
-    
+
+}
+
+
+// MARK: - fastlane snapshot 判定
+//
+// fastlane snapshot（App Store スクショ自動撮影）実行中かどうかを判定するヘルパー。
+// SnapshotHelper が起動引数 -FASTLANE_SNAPSHOT YES を付けるので、それを読む。
+// 撮影時だけ操作モードを達人にしたり、電卓/数式のサンプル計算を流し込むために使う。
+// ※ 撮影フックは DEBUG ビルドかつ撮影中のみ有効（本番挙動には影響しない）。
+//
+// 注意: 独立ファイルにすると Xcode16 の同期フォルダで本体ターゲットへの
+//       所属登録漏れ（Cannot find in scope）を起こしやすいので、
+//       確実に本体ターゲットに含まれる AppMain.swift 内に同居させている。
+enum SnapshotSupport {
+    /// fastlane snapshot による撮影中なら true。
+    /// SnapshotHelper が UserDefaults 経由で -FASTLANE_SNAPSHOT YES をセットする。
+    static var isRunningSnapshot: Bool {
+        #if DEBUG
+        return UserDefaults.standard.bool(forKey: "FASTLANE_SNAPSHOT")
+        #else
+        return false
+        #endif
+    }
 }
 
 

@@ -15,7 +15,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "カルメモ"
+            "value" : "Calclin"
           }
         }
       }
@@ -175,7 +175,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "カルメモ（電卓）"
+            "value" : "Calclin（電卓）"
           }
         }
       }
@@ -191,7 +191,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "カルメモ（数式）"
+            "value" : "Calclin（数式）"
           }
         }
       }

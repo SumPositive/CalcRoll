@@ -60,3 +60,7 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+## fastlane secrets（コミットしない）
+fastlane/.env
+fastlane/*.p8
