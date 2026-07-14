@@ -1,0 +1,46 @@
+{
+  "configurations" : [
+    {
+      "id" : "20B87EB8-39DC-432C-919B-25394A26C307",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Calclin.xcodeproj",
+      "identifier" : "C30A78A22E10EE8500212729",
+      "name" : "Calclin"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:Calclin.xcodeproj",
+        "identifier" : "C30A78AF2E10EE8700212729",
+        "name" : "CalclinTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Calclin.xcodeproj",
+        "identifier" : "C30A78B92E10EE8700212729",
+        "name" : "CalclinUITests"
+      }
+    },
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Calclin.xcodeproj",
+        "identifier" : "C3563285300529A500539096",
+        "name" : "CalclinSnapshotUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
