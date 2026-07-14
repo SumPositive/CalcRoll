@@ -1,0 +1,1 @@
+A calculator memo on a paper-style roll. Switch calculator and formula modes, edit rows, add notes, and export to PDF. Includes unit math and multiple calculators.

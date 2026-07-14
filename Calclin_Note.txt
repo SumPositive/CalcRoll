@@ -102,14 +102,13 @@ Calclinのアプリアイコンを刷新してSVGベースにしたい
 
 Condition,Packlinで行った　fastlaneによるメタデータとスクリーンショットの生成とアップロードを行えるようにしたい
 
-
 ----------------------------------------------------------
 2.3.1 更新
 - アプリアイコンを変更しました。jaアプリ名も Calclin で統一しました
 - その他、修正や改善
 -----
 fastlane メタデータを更新して
-2.8.0 審査提出中、README.mdの開発メモ、公開アプリパネル、取扱説明を更新して
+2.3.1 審査提出中、README.mdの開発メモ、公開アプリパネル、取扱説明を更新して
 -----
 cd /Users/sumpositive/GitLocal/Calclin
 fastlane preview_metadata
@@ -120,8 +119,28 @@ fastlane upload_screenshots
 ------------------------------------------------
 
 
-XcodeGenの利用禁止、Xcode管理で統一することを readme.mdなどにも明示しておいて
+Calclinアプリのロケールを ja/en に加えて de/es/fr/it/ko/zh-Hant に対応したい
 
-テストコードを　@Test("日本語の説明文") + 英語の関数名　というスタイルに統一したい
+fastlaneメタデータ、azukid.com公開アプリパネル、取扱説明のロケールも de/es/fr/it/ko/zh-Hant に対応したい
 
+
+
+
+
+
+----------------------------------------------------------
+2.4.0 更新
+- 
+- 
+-----
+fastlane メタデータを更新して
+2.4.0 審査提出中、README.mdの開発メモ、公開アプリパネル、取扱説明を更新して
+-----
+cd /Users/sumpositive/GitLocal/Calclin
+fastlane preview_metadata
+fastlane upload_metadata
+---
+fastlane screenshots
+fastlane upload_screenshots
+------------------------------------------------
 

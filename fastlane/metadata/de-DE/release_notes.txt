@@ -1,0 +1,2 @@
+- Refreshed the app icon.
+- Minor display adjustments and stability improvements.
